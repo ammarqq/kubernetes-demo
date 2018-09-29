@@ -1,0 +1,109 @@
+Course Content
+
+Search course content
+Section: 1
+3 / 3
+Introduction to this Course
+Section: 2
+21 / 21
+Docker Crash Course
+Section: 3
+1 / 10
+Getting Started with Kubernetes
+Section: 4
+3 / 10
+Section 2: Kubernetes Basic and Core Concepts
+35. Kubernetes Architecture
+5:08
+36. Scaling Kubernetes
+9:19
+37. Scaling Commands
+38. Deploying to Kubernetes
+6:23
+39. Deployments Commands
+40. Labels & Selectors
+6:32
+41. Health Checking
+5:20
+42. Web Interface
+6:05
+43. Web Interface Commands
+44. Exercise: Kubernetes Basic & Core Components
+6:04
+Section: 5
+13 / 17
+Section 3: Deep Dive into Kubernetes
+45. DNS & Service Discovery
+21:21
+46. Text Lecture: DNS & Service Discovery
+47. Volumes
+28:02
+48. Volumes Commands
+49. Note: Secrets
+50. Secrets
+17:15
+51. Secrets Commands
+52. Usage & Resource Monitoring
+7:11
+53. Usage & Resource Monitoring Commands
+54. Namespaces & Resource Quotas
+17:32
+55. Namespaces & Resource Quotas Commands
+56. Auto-Scaling
+9:32
+57. Auto-Scaling Commands
+58. Auditing
+20:20
+59. Text Lecture: Auditing
+60. Exercise: Auto-Scaling & Resources
+4:14
+61. Bonus Lectures: Kubernetes Networking
+Section: 6
+0 / 5
+Section 4: Kubernetes in Production
+Section: 7
+0 / 3
+Section 5: Wrapping Up
+Auto-Scaling Commands
+Section 5, Lecture 57
+Commands
+(In the first terminal)
+
+# since the latest minikube doesn't enable metrics-server by default
+minikube addons enable metrics-server  
+ 
+kubectl apply -f ./wordpress-deployment.yaml
+ 
+kubectl autoscale deployment wordpress --cpu-percent=50 --min=1 --max=5
+(In the other terminal)
+
+kubectl run -i --tty load-generator --image=busybox /bin/sh
+ 
+while true; do wget -q -O- http://wordpress.default.svc.cluster.local; done
+(In the first terminal)
+
+kubectl get hpa
+
+
+Trouble Shooting
+In the other terminal where the load-generator is running, if it shows below errors
+
+/ # while true ; do wget -q -O- http://wordpress.default.svc.cluster.local ; done
+wget: can't connect to remote host (10.XX.XXX.XXX): Network is unreachable
+wget: can't connect to remote host (10.XX.XXX.XXX): Network is unreachable
+wget: can't connect to remote host (10.XX.XXX.XXX): Connection timed out
+wget: can't connect to remote host (10.XX.XXX.XXX): Network is unreachable
+wget: can't connect to remote host (10.XX.XXX.XXX): Connection timed out
+Solution:
+
+replace http://wordpress.default.svc.cluster.local with the output of minikube service wordpress --url
+
+For example:
+
+while true ; do wget -q -O- http://192.168.99.100:32094 ; done
+
+Related Q&A:
+
+https://www.udemy.com/kubernetes-from-a-devops-kubernetes-guru/learn/v4/questions/4400548
+
+https://www.udemy.com/kubernetes-from-a-devops-kubernetes-guru/learn/v4/questions/4838588
